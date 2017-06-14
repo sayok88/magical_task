@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+
+
+</head>
+<body>
+    {% csrf_token %}
+    <script>
+    $(document).ready(function(){
+    function getCookie(c_name) {
+        if(document.cookie.length > 0) {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if(c_start != -1) {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if(c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+        }
+        return "";
+    }
+
+    $(function () {
+        $.ajaxSetup({
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken")
+            }
+        });
+    });
+});
+
+
+    </script>
+  <div class="container">
+       <nav class="nav-extended">
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo">Magical Test</a>
+      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+
+      </ul>
+      <ul class="side-nav" id="mobile-demo">
+
+      </ul>
+    </div>
+    <div class="nav-content">
+      <ul class="tabs tabs-transparent">
+        <li class="tab"><a href="#test1">Employees</a></li>
+        <li class="tab"><a class="active" href="#test2">Companies</a></li>
+
+        <li class="tab"><a href="#test4">Search</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div id="test1" class="col s12">Employees</div>
+  <div id="test2" class="col s12">Companies</div>
+
+  <div id="test4" class="row">
+      Search for Employees, Job listings
+      <div class="col s12">
+      <div class="input-field">
+          <input id="search" type="search" onkeyup="search()">
+          <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+          <i class="material-icons">close</i>
+        </div></div>
+      <div id="div_Employees" class="col s12">
+
+      </div>
+      <div id="div_Jobs" class="col s12"></div>
+
+  </div>
+
+  </div>
+
+<script>
+    function search() {
+        console.log(document.getElementById("search").value);
+        $.ajax({
+        url: "http://localhost:8000/searchapi/",
+        data: {
+            query: document.getElementById("search").value
+        },
+        type: 'POST',
+        error: function (xhr, error) {
+            console.debug(xhr);
+            console.debug(error);
+        },
+        success: function (data) {
+            console.log(data.detail);
+            var emps=document.getElementById("div_Jobs");
+            emps.innerHTML='';
+
+            if(data.jobs.length>0){
+                var label=document.createElement("label")
+                label.innerHTML="Jobs";
+                emps.appendChild(label);
+                var child1=document.createElement("table");
+                var child2=document.createElement("tr");
+                var child3=document.createElement("td");
+                child3.innerHTML="Role";
+                child2.appendChild(child3);
+                child3=document.createElement("td");
+                child3.innerHTML="Company Name";
+                child2.appendChild(child3);
+                child3=document.createElement("td");
+                child3.innerHTML="Company Name";
+                child2.appendChild(child3);
+                child1.appendChild(child2);
+
+                for (var i = 0; i <=data.jobs.length - 1; i++) {
+                    child2 = document.createElement("tr");
+                    child3.innerHTML = data.jobs[i].role_name;
+                    child2.appendChild(child3);
+                    child3 = document.createElement("td");
+                    child3.innerHTML = data.jobs[i].company;
+                    child2.appendChild(child3);
+                    child1.appendChild(child2);
+                  }
+          emps.appendChild(child1);
+            }
+             emps=document.getElementById("div_Employees");
+            emps.innerHTML='';
+
+            if(data.employees.length>0){
+                var label=document.createElement("label")
+                label.innerHTML="Employees";
+                emps.appendChild(label);
+                var child1=document.createElement("table");
+                var child2=document.createElement("tr");
+                var child3=document.createElement("td");
+                child3.innerHTML="Name";
+                child2.appendChild(child3);
+                child3=document.createElement("td");
+                child3.innerHTML="Role";
+                child2.appendChild(child3);
+                child3=document.createElement("td");
+                child3.innerHTML="age";
+                child2.appendChild(child3);
+                child3=document.createElement("td");
+                child3.innerHTML="Company Name";
+                child2.appendChild(child3);
+                child3=document.createElement("td");
+                child3.innerHTML="Company Name";
+                child2.appendChild(child3);
+                child1.appendChild(child2);
+
+                for (var i = 0; i <=data.employees.length - 1; i++) {
+                    child2 = document.createElement("tr");
+                    child3.innerHTML = data.employees[i].name;
+                    child2.appendChild(child3);
+                    child3 = document.createElement("td");
+                    child3.innerHTML = data.employees[i].role;
+                    child2.appendChild(child3);
+                    child3 = document.createElement("td");
+                      child3.innerHTML = data.employees[i].age;
+                      child2.appendChild(child3);
+                      child3 = document.createElement("td");
+                      child3.innerHTML = data.employees[i].company;
+                      child2.appendChild(child3);
+                      child1.appendChild(child2);
+                  }
+          emps.appendChild(child1);
+            }
+                }
+
+    });
+    }
+    $.get("http://localhost:8000/api/companies/?format=json", function(data) {
+
+        var emps=document.getElementById("test2");
+        var child1=document.createElement("table");
+        var child2=document.createElement("tr");
+        var child3=document.createElement("td");
+        child3.innerHTML="Name";
+        child2.appendChild(child3);
+        child3=document.createElement("td");
+        child3.innerHTML="Location";
+        child2.appendChild(child3);
+        child3=document.createElement("td");
+        child3.innerHTML="No of Employees";
+      child2.appendChild(child3);
+        child3=document.createElement("td");
+        child3.innerHTML="Employees";
+      child2.appendChild(child3);
+      child1.appendChild(child2);
+
+      for (var i = 0; i <=data.length - 1; i++) {
+          child2 = document.createElement("tr");
+          child3.innerHTML = data[i].name;
+          child2.appendChild(child3);
+          child3 = document.createElement("td");
+          child3.innerHTML = data[i].location_name;
+          child2.appendChild(child3);
+          child3 = document.createElement("td");
+          child3.innerHTML = data[i].total_employees;
+          child2.appendChild(child3);
+          child1.appendChild(child2);
+      }
+  emps.appendChild(child1);
+
+
+
+
+}).fail(function(err) {
+  $("#test1").text("error" + JSON.stringify(err));
+});
+     $.get("http://localhost:8000/api/employees/?format=json", function(data) {
+
+        var emps=document.getElementById("test1");
+        var child1=document.createElement("table");
+        var child2=document.createElement("tr");
+        var child3=document.createElement("td");
+        child3.innerHTML="Name";
+        child2.appendChild(child3);
+        child3=document.createElement("td");
+        child3.innerHTML="Role";
+        child2.appendChild(child3);
+        child3=document.createElement("td");
+        child3.innerHTML="age";
+      child2.appendChild(child3);
+        child3=document.createElement("td");
+        child3.innerHTML="Company Name";
+      child2.appendChild(child3);
+         child3=document.createElement("td");
+        child3.innerHTML="Company Name";
+      child2.appendChild(child3);
+      child1.appendChild(child2);
+
+      for (var i = 0; i <=data.length - 1; i++) {
+          child2 = document.createElement("tr");
+          child3.innerHTML = data[i].name;
+          child2.appendChild(child3);
+          child3 = document.createElement("td");
+          child3.innerHTML = data[i].role;
+          child2.appendChild(child3);
+          child3 = document.createElement("td");
+          child3.innerHTML = data[i].age;
+          child2.appendChild(child3);
+          child3 = document.createElement("td");
+          child3.innerHTML = data[i].company_name;
+          child2.appendChild(child3);
+          child1.appendChild(child2);
+      }
+  emps.appendChild(child1);
+
+
+
+
+}).fail(function(err) {
+  $("#test1").text("error" + JSON.stringify(err));
+});
+
+</script>
+</body>
+</html>
