@@ -91,7 +91,7 @@
     function search() {
         console.log(document.getElementById("search").value);
         $.ajax({
-        url: "http://localhost:8000/searchapi/",
+        url: "http://{{ request.get_host }}/searchapi/",
         data: {
             query: document.getElementById("search").value
         },
@@ -180,7 +180,7 @@
 
     });
     }
-    $.get("http://localhost:8000/api/companies/?format=json", function(data) {
+    $.get("http://{{ request.get_host }}/api/companies/?format=json", function(data) {
 
         var emps=document.getElementById("test2");
         var child1=document.createElement("table");
@@ -219,7 +219,7 @@
 }).fail(function(err) {
   $("#test1").text("error" + JSON.stringify(err));
 });
-     $.get("http://localhost:8000/api/employees/?format=json", function(data) {
+     $.get("http://{{ request.get_host }}/api/employees/?format=json", function(data) {
 
         var emps=document.getElementById("test1");
         var child1=document.createElement("table");
