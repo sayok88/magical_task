@@ -64,6 +64,16 @@
         <li class="tab"><a class="active" href="#test2">Companies</a></li>
 
         <li class="tab"><a href="#test4">Search</a></li>
+        {%  if not user.is_authenticated %}
+            <li class="tab"><a onclick="window.location.assign('/login');" href="/login">Login</a> </li>
+                        <li class="tab"><a onclick="window.location.assign('/register');" href="/register">Register</a> </li>
+
+{% else %}
+                                    <li class="tab"><a onclick="window.location.assign('/addemployee');" href="/addemployee">Add Employee</a> </li>
+                                    <li class="tab"><a onclick="window.location.assign('/addjob');" href="/addjob">Add Job</a> </li>
+
+            <li class="tab"><a onclick="window.location.assign('/logout');" href="/login">Logout</a> </li>
+          {%   endif %}
       </ul>
     </div>
   </nav>
@@ -194,13 +204,13 @@
         child3=document.createElement("td");
         child3.innerHTML="No of Employees";
       child2.appendChild(child3);
-        child3=document.createElement("td");
-        child3.innerHTML="Employees";
-      child2.appendChild(child3);
+
       child1.appendChild(child2);
 
       for (var i = 0; i <=data.length - 1; i++) {
+
           child2 = document.createElement("tr");
+          child3=document.createElement("td");
           child3.innerHTML = data[i].name;
           child2.appendChild(child3);
           child3 = document.createElement("td");
@@ -236,13 +246,14 @@
         child3=document.createElement("td");
         child3.innerHTML="Company Name";
       child2.appendChild(child3);
-         child3=document.createElement("td");
-        child3.innerHTML="Company Name";
-      child2.appendChild(child3);
+
+      
       child1.appendChild(child2);
 
       for (var i = 0; i <=data.length - 1; i++) {
           child2 = document.createElement("tr");
+                    child3 = document.createElement("td");
+
           child3.innerHTML = data[i].name;
           child2.appendChild(child3);
           child3 = document.createElement("td");

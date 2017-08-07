@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}My amazing site{% endblock %}</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+
+
+</head>
+<body>
+    {% csrf_token %}
+    <script>
+    $(document).ready(function(){
+    function getCookie(c_name) {
+        if(document.cookie.length > 0) {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if(c_start != -1) {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if(c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+        }
+        return "";
+    }
+
+    $(function () {
+        $.ajaxSetup({
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken")
+            }
+        });
+    });
+});
+
+
+    </script>
+  <div class="container">
+       <nav class="nav-extended">
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo">Magical Test</a>
+      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+
+      </ul>
+      <ul class="side-nav" id="mobile-demo">
+
+      </ul>
+    </div>
+    <div class="nav-content">
+      <ul class="tabs tabs-transparent">
+        <li class="tab"><a href="/#test1" onclick="window.location.assign('/#test1');">Employees</a></li>
+        <li class="tab"><a  onclick="window.location.assign('/#test2');" href="/#test2">Companies</a></li>
+
+        <li class="tab"><a onclick="window.location.assign('/#test4');" href="/#test4">Search</a></li>
+        {%  if not user.is_authenticated %}
+            <li class="tab">{% block login %}<a onclick="window.location.assign('/login');"  href="/login">Login</a> {%endblock%} </li>
+                        <li class="tab">{% block register %}<a onclick="window.location.assign('/register');" href="/register">Register</a>{%endblock%}  </li>
+
+{% else %}
+                                    <li class="tab">{% block addemp %}<a onclick="window.location.assign('/addemployee');" href="/addemployee">Add Employee</a>{%endblock%}  </li>
+                                    <li class="tab">{% block addjob %}<a onclick="window.location.assign('/addjob');" href="/addjob">Add Job</a> {%endblock%} </li>
+
+            <li class="tab"><a onclick="window.location.assign('/logout');" href="/login">Logout</a> </li>
+          {%   endif %}
+      </ul>
+    </div>
+  </nav>
+        {% block content %}{% endblock %}
+
+  </div>
+
+
+</body>
+</html>

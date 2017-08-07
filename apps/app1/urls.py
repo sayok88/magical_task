@@ -11,5 +11,11 @@ router.register(r'locations',views.LocationViewSet)
 
 urlpatterns = [
     url(r'^$', views.home, name='home'),
+    url(r'^login/', views.elogin, name='login'),
+    url(r'^logout/', views.logout1, name='logout'),
+    url(r'^addemployee/', views.addemployee, name='addemp'),
+    url(r'^addjob/', views.addjob, name='addjob'),
+
+    url(r'^register/', views.register, name='register'),
     url(r'^searchapi/',restview.SearchView.as_view(),name='search'),
     url(r'^api/', include(router.urls)),]

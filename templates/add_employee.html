@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Add Employee{% endblock %}
+{% block addemp %}<a class="active" href="#">Add Employee</a> {%endblock%}
+
+{% block content %}
+
+      <div  class="col s12"><form method="post">{{ form }}{% csrf_token %}<input type="submit" value="Submit"></form></div>
+
+{% endblock %}

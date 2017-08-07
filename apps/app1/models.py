@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 
 from django.contrib.admin import models
 from django.db import models
+from django.contrib.auth.models import User
+
 
 class Location(models.Model):
     name=models.CharField(max_length=100)
@@ -53,6 +55,10 @@ class Employee(models.Model):
 class JobOpening(models.Model):
     role_name=models.CharField(max_length=50)
     associated_company=models.ForeignKey(Company)
-
+class CompanyUser(models.Model):
+    user=models.ForeignKey(User)
+    company=models.ForeignKey(Company,null=True)
+    def __str__(self):
+        return self.user.username+' '+self.company.name
 # Roles can be further normalized but additional information regardings roles are
 # company specific or not is not provided hence it is not undertaken
